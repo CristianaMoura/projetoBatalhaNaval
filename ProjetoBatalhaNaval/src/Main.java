@@ -29,18 +29,22 @@ classe Jogador - random padrão - @Override sobreescreve para preenchimento manu
  */
 
 
+import model.Jogador;
+import model.JogadorMaquina;
+import model.JogadorPessoa;
+
 import java.util.Scanner;
 import java.util.Random;
 
 public class Main {
+    public static boolean existeGanhador = false;
+    public static JogadorPessoa jogadorPessoa = new JogadorPessoa();
+    public static JogadorMaquina jogadorMaquina = new JogadorMaquina();
 
     public static void main(String[] args) {
 
-        String[][] tabuleiroJogador = new String[10][10];
-        String[][] tabuleiroComputador = new String[10][10];
-
         Tabuleiro tabuleiro = new Tabuleiro();
-        tabuleiro.imprimeTabuleiro(tabuleiroJogador);
+//        tabuleiro.imprimeTabuleiro(tabuleiroJogador);
 
         Random gerador = new Random();
 
@@ -50,49 +54,94 @@ public class Main {
         while (contador > 0) {
             linha = gerador.nextInt(10);
             coluna = gerador.nextInt(10);
-            tabuleiroJogador[linha][coluna] = "N";
+            jogadorPessoa.tabuleiro[linha][coluna] = "N";
+
             linha = gerador.nextInt(10);
             coluna = gerador.nextInt(10);
-            tabuleiroComputador[linha][coluna] = "N";
+            jogadorMaquina.tabuleiro[linha][coluna] = "N";
             contador--;
         }
 
         System.out.println("Iniciando Tabuleiro Batalha Naval!");
-        tabuleiro.imprimeTabuleiro(tabuleiroJogador);
-        tabuleiro.imprimeTabuleiro(tabuleiroComputador);
+        inputDeNomeDosJogadores();
+        tabuleiro.imprimeTabuleiro(jogadorPessoa);
+        tabuleiro.imprimeTabuleiro(jogadorMaquina);
 
+        while (!existeGanhador){
+            String linhaJogadaLetra;
+            int colunaJogada;
 
-
-        String linhaJogadaLetra;
-        int colunaJogada, contadorAtaque = 10;
-
-        while (contadorAtaque > 0) {
             Scanner entrada = new Scanner(System.in);
-            System.out.println("Informe a jogada que deseja letra e número: ");
+            System.out.println(jogadorPessoa.nome +" - Informe a jogada que deseja letra e número: ");
             linhaJogadaLetra = entrada.nextLine();
             colunaJogada = entrada.nextInt();
+
+            jogada(jogadorPessoa, jogadorMaquina, linhaJogadaLetra, colunaJogada);
+
+            System.out.println("Iniciando Jogada do Computador!");
+            String linhaJogadaLetraMaquina;
+            int colunaJogadaMaquina;
+            String letras[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+
+            linhaJogadaLetraMaquina = letras[gerador.nextInt(10)];
+            colunaJogadaMaquina = gerador.nextInt(10);
+
+            System.out.println("Jogada do Computador! " + linhaJogadaLetraMaquina +" " + colunaJogadaMaquina);
+            jogada(jogadorMaquina, jogadorPessoa, linhaJogadaLetraMaquina, colunaJogadaMaquina);
+
+
+            verificaGanhador(jogadorPessoa);
+            verificaGanhador(jogadorMaquina);
+        }
+        System.out.println("JOGO FINALIZADO");
+
+}
+
+    private static void verificaGanhador(Jogador jogador) {
+        if (jogador.quantidadeAcertos == 10){
+            existeGanhador = true;
+            System.out.println("Parabens "+ jogador.nome + " !!! Vc é o ganhador!!");
+        }
+
+    }
+
+    public static void inputDeNomeDosJogadores() {
+        Scanner entrada = new Scanner(System.in);
+
+        System.out.println("Digite o nome do Jogador1 ");
+        jogadorPessoa.nome = entrada.next();
+
+        System.out.println("Digite o nome do Jogador2 ");
+        jogadorMaquina.nome = entrada.next();
+
+    }
+
+    public static void jogada(Jogador jogadorPrincipal, Jogador jogadorOponente, String linhaJogadaLetra , int colunaJogada){
+            Tabuleiro tabuleiro = new Tabuleiro();
             int linhaJogadaNumero = converterLetra(linhaJogadaLetra);
 
-            if (tabuleiroJogador[linhaJogadaNumero][colunaJogada] == null) {
+            if (jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] == null) {
 
-                if (tabuleiroComputador[linhaJogadaNumero][colunaJogada] == null) {
-                    tabuleiroJogador[linhaJogadaNumero][colunaJogada] = "-";
+                if (jogadorOponente.tabuleiro[linhaJogadaNumero][colunaJogada] == null) {
+                    jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] = "-";
                     System.out.println("Ops... Tiro na água!");
-                } else if (tabuleiroComputador[linhaJogadaNumero][colunaJogada] == "N") {
-                    tabuleiroJogador[linhaJogadaNumero][colunaJogada] = "*";
+                } else if (jogadorOponente.tabuleiro[linhaJogadaNumero][colunaJogada] == "N") {
+                    jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] = "*";
+                    jogadorPrincipal.quantidadeAcertos++;
                     System.out.println("Parabéns... Submarino Atingido!");
 
                 } else {
                     System.out.println("Jogada Inválida. Tente novamente!");
                 }
 
-            } else if (tabuleiroJogador[linhaJogadaNumero][colunaJogada] == "N") {
+            } else if (jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] == "N" || jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] == "N") {
 
-                if (tabuleiroComputador[linhaJogadaNumero][colunaJogada] == null) {
-                    tabuleiroJogador[linhaJogadaNumero][colunaJogada] = "n";
+                if (jogadorOponente.tabuleiro[linhaJogadaNumero][colunaJogada] == null) {
+                    jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] = "n";
                     System.out.println("Ops... Tiro na água!");
-                } else if (tabuleiroComputador[linhaJogadaNumero][colunaJogada] == "N") {
-                    tabuleiroJogador[linhaJogadaNumero][colunaJogada] = "X";
+                } else if (jogadorOponente.tabuleiro[linhaJogadaNumero][colunaJogada] == "N") {
+                    jogadorPrincipal.tabuleiro[linhaJogadaNumero][colunaJogada] = "X";
+                    jogadorPrincipal.quantidadeAcertos++;
                     System.out.println("Parabéns... Submarino Atingido!");
                 } else {
                     System.out.println("Jogada Inválida. Tente novamente!");
@@ -100,8 +149,8 @@ public class Main {
             } else {
                 System.out.println("Jogada Inválida. Tente novamente!");
             }
-            tabuleiro.imprimeTabuleiro(tabuleiroJogador);
-            contadorAtaque--;
+            tabuleiro.imprimeTabuleiro(jogadorPrincipal);
+
         }
 
 
@@ -134,8 +183,6 @@ public class Main {
 //            tabuleiroManual.imprimeTabuleiro(tabuleiro);
 //
 //        } while(contadorNavio <= 9);
-
-    }
 
 
     public static int converterLetra(String letra) {
