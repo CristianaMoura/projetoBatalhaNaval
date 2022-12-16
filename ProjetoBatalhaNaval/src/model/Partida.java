@@ -14,12 +14,16 @@ public class Partida {
         jogador.nome = entrada.next();
     }
 
-    public void verificaSeGanhou(Jogador jogador, boolean existeGanhador) {
-        if (jogador.quantidadeAcertos == 10){
-            System.out.println("Parabens "+ jogador.nome + " !!! Vc é o ganhador!!");
-            existeGanhador = true;
+    public boolean verificaSeHouveGanhador(Jogador jogadorPrincipal, Jogador jogadorOponente) {
+        if (jogadorOponente.quantidadeAcertos == 10){
+            System.out.println("Parabens "+ jogadorOponente.nome + " !!! Vc é o ganhador!!");
+            return true;
+        }else if (jogadorPrincipal.quantidadeAcertos == 10){
+            System.out.println("Parabens "+ jogadorPrincipal.nome + " !!! Vc é o ganhador!!");
+            return true;
         }
-        existeGanhador =  false;
+
+        return false;
     }
 
 

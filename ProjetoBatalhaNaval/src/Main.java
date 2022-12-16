@@ -60,8 +60,7 @@ public class Main {
             jogadorPessoa.fazJogadaContra(jogadorMaquina);
             jogadorMaquina.fazJogadaContra(jogadorPessoa);
 
-            partida.verificaSeGanhou(jogadorPessoa, existeGanhador);
-            partida.verificaSeGanhou(jogadorMaquina, existeGanhador);
+            existeGanhador = partida.verificaSeHouveGanhador(jogadorPessoa, jogadorMaquina);
         }
         System.out.println("JOGO FINALIZADO");
 
