@@ -35,19 +35,19 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Main {
-    public static boolean existeGanhador = false;
-    public static JogadorPessoa jogadorPessoa = new JogadorPessoa();
-    public static JogadorMaquina jogadorMaquina = new JogadorMaquina();
-
     public static void main(String[] args) {
+
+        boolean existeGanhador = false;
+        JogadorPessoa jogadorPessoa = new JogadorPessoa();
+        JogadorMaquina jogadorMaquina = new JogadorMaquina();
 
         Tabuleiro tabuleiro = new Tabuleiro();
         Partida partida = new Partida();
 
         System.out.println("Iniciando Tabuleiro Batalha Naval!");
 
-        partida.solicitaNomeDosJogadores("Jogador1", jogadorPessoa);
-        partida.solicitaNomeDosJogadores("Jogador2", jogadorMaquina);
+        partida.solicitaNomeDoJogador("Jogador1", jogadorPessoa);
+        partida.solicitaNomeDoJogador("Jogador2", jogadorMaquina);
 
         tabuleiro.montaTabuleiro(jogadorPessoa);
         tabuleiro.montaTabuleiro(jogadorMaquina);
@@ -60,8 +60,8 @@ public class Main {
             jogadorPessoa.fazJogadaContra(jogadorMaquina);
             jogadorMaquina.fazJogadaContra(jogadorPessoa);
 
-            partida.verificaSeExisteUmGanhador(jogadorPessoa);
-            partida.verificaSeExisteUmGanhador(jogadorMaquina);
+            partida.verificaSeGanhou(jogadorPessoa, existeGanhador);
+            partida.verificaSeGanhou(jogadorMaquina, existeGanhador);
         }
         System.out.println("JOGO FINALIZADO");
 

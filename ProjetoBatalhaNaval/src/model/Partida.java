@@ -7,19 +7,19 @@ import java.util.Scanner;
  */
 public class Partida {
 
-    public void solicitaNomeDosJogadores(String jogadorNumero, Jogador jogador) {
+    public void solicitaNomeDoJogador(String jogadorNumero, Jogador jogador) {
         Scanner entrada = new Scanner(System.in);
 
         System.out.println("Digite o nome do " + jogadorNumero);
         jogador.nome = entrada.next();
     }
 
-    public boolean verificaSeExisteUmGanhador(Jogador jogador) {
+    public void verificaSeGanhou(Jogador jogador, boolean existeGanhador) {
         if (jogador.quantidadeAcertos == 10){
             System.out.println("Parabens "+ jogador.nome + " !!! Vc é o ganhador!!");
-            return true;
+            existeGanhador = true;
         }
-        return false;
+        existeGanhador =  false;
     }
 
 
