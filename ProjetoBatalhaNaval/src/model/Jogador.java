@@ -9,5 +9,9 @@ public class Jogador {
     public int quantidadeAcertos = 0;
     public String nome;
 
+    public void fazJogadaContra(Jogador jogador){
+
+    }
+
 
 }
